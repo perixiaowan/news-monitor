@@ -13,7 +13,12 @@ def hello():
     sql = ""
     if request.method == "GET":
         data = request.json
-        print("data:%s" %(data))
+        print("data:%s" %(data['Host']))
+        print("data:%s" % (data['MemFree']))
+        print("data:%s" % (data['MemUsage']))
+        print("data:%s" % (data['MemTotal']))
+        print("data:%s" % (data['LoadAvg']))
+        print("data:%s" % (data['Time']))
         try:
             sql = "INSERT INTO `stat` (`host`,`mem_free`,`mem_usage`,`mem_total`,`load_avg`,`time`) VALUES('%s', '%d', '%d', '%d', '%s', '%d')" % (
             data['Host'], data['MemFree'], data['MemUsage'], data['MemTotal'], data['LoadAvg'], int(data['Time']))
