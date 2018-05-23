@@ -11,7 +11,7 @@ c = db.cursor()
 @app.route("/", methods=["GET", "POST"])
 def hello():
     sql = ""
-    if request.method == "POST":
+    if request.method == "GET":
         data = request.json
         try:
             sql = "INSERT INTO `stat` (`host`,`mem_free`,`mem_usage`,`mem_total`,`load_avg`,`time`) VALUES('%s', '%d', '%d', '%d', '%s', '%d')" % (
