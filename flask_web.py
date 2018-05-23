@@ -3,8 +3,7 @@ import json
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
-db = mysql.connect(user="reboot", passwd="reboot123", \
-                   db="falcon", charset="utf8")
+db = mysql.connect(user="root", passwd="123456", db="falcon", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
 
