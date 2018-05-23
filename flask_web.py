@@ -2,9 +2,6 @@ import pymysql as mysql
 import json
 from flask import Flask, request, render_template
 
-
-
-
 app = Flask(__name__)
 db = mysql.connect(host="47.52.106.208",user="xiaowan", password="xiaowan", db="falcon", charset="utf8")
 db.autocommit(True)
@@ -13,6 +10,8 @@ db.autocommit(True)
 # 使用 cursor() 方法创建一个游标对象 cursor
 cursor = db.cursor()
 
+# 使用 fetchone() 方法获取单条数据.
+data = cursor.fetchone()
 
 @app.route("/", methods=["GET", "POST"])
 def hello():
