@@ -11,7 +11,6 @@ db.autocommit(True)
 cursor = db.cursor()
 
 # 使用 fetchone() 方法获取单条数据.
-data = cursor.fetchone()
 
 @app.route("/", methods=["GET", "POST"])
 def hello():
@@ -37,7 +36,7 @@ def hello():
 
 @app.route("/data", methods=["GET"])
 def getdata():
-    c.execute("SELECT `time`,`mem_usage` FROM `stat`")
+    cursor.execute("SELECT `time`,`mem_usage` FROM `stat`")
     ones = [[i[0] * 1000, i[1]] for i in cursor.fetchall()]
     return "%s(%s);" % (request.args.get('callback'), json.dumps(ones))
 
