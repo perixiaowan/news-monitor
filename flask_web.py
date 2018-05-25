@@ -15,7 +15,7 @@ cursor = db.cursor()
 @app.route("/", methods=["GET", "POST"])
 def hello():
     sql = ""
-    if request.method == "GET":
+    if request.method == "POST":
         data = request.json
         print("data:%s" % (data['Host']))
         print("data:%s" % (data['MemFree']))
