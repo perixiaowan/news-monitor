@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import inspect
 import time
-import urllib, urllib2
+import urllib
 import json
 import socket
 
