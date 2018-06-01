@@ -6,6 +6,9 @@
         <title>News Monitor Example</title>
 
         <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+        <script src="../js/highstock.js"></script>
+        <script src="../js/highcharts.js"></script>
+        <script src="../js/exporting.js"></script>
         <style type="text/css">
 ${demo.css}
         </style>
@@ -14,7 +17,7 @@ $(function () {
     $.getJSON('/data?callback=?', function (data) {
 
         // Create the chart
-        $('#container').highcharts('StockChart', {
+        $('#container').highcharts({
 
             rangeSelector: {
                 inputEnabled: $('#container').width() > 480,
@@ -39,8 +42,7 @@ $(function () {
         </script>
     </head>
     <body>
-<script src="../js/highstock.js"></script>
-<script src="../js/exporting.js"></script>
+
 
 
 <div id="container" style="height: 400px"></div>
