@@ -15,49 +15,50 @@ class mon:
         self.data = {}
 
     def getTime(self):
-        return time.strftime("%Y-%m-%d %H:%M:%S")
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def getHost(self):
         return socket.gethostname()
 
     def getLoadAvg(self):
-        with open('/proc/loadavg') as load_open:
-        # with open(r'D:\proc\loadavg') as load_open:
+        # with open('/proc/loadavg') as load_open:
+        with open(r'D:\proc\loadavg') as load_open:
             a = load_open.read().split()[:3]
             return ','.join(a)
 
     def getMemTotal(self):
-        with open('/proc/meminfo') as mem_open:
-        # with open(r'D:\proc\meminfo') as mem_open:
+        # with open('/proc/meminfo') as mem_open:
+        with open(r'D:\proc\meminfo') as mem_open:
             a = int(mem_open.readline().split()[1])
             return a / 1024
 
     def getMemUsage(self, noBufferCache=True):
         if noBufferCache:
-            # with open(r'D:\proc\meminfo') as mem_open:
-            with open('/proc/meminfo') as mem_open:
+            with open(r'D:\proc\meminfo') as mem_open:
+            # with open('/proc/meminfo') as mem_open:
                 T = int(mem_open.readline().split()[1])
                 F = int(mem_open.readline().split()[1])
                 B = int(mem_open.readline().split()[1])
                 C = int(mem_open.readline().split()[1])
                 return (T - F - B - C) / 1024
         else:
-            # with open(r'D:\proc\meminfo') as mem_open:
-            with open('/proc/meminfo') as mem_open:
+            with open(r'D:\proc\meminfo') as mem_open:
+            # with open('/proc/meminfo') as mem_open:
                 a = int(mem_open.readline().split()[1]) - int(mem_open.readline().split()[1])
                 return a / 1024
 
     def getMemFree(self, noBufferCache=True):
         if noBufferCache:
-            # with open(r'D:\proc\meminfo') as mem_open:
-            with open('/proc/meminfo') as mem_open:
+            with open(r'D:\proc\meminfo') as mem_open:
+            # with open('/proc/meminfo') as mem_open:
                 T = int(mem_open.readline().split()[1])
                 F = int(mem_open.readline().split()[1])
                 B = int(mem_open.readline().split()[1])
                 C = int(mem_open.readline().split()[1])
                 return (F + B + C) / 1024
         else:
-            with open('/proc/meminfo') as mem_open:
+            with open(r'D:\proc\meminfo') as mem_open:
+            # with open('/proc/meminfo') as mem_open:
                 mem_open.readline()
                 a = int(mem_open.readline().split()[1])
                 return a / 1024
@@ -89,10 +90,12 @@ if __name__ == "__main__":
         # print(response)
         # urlopen_get.close()
 
-        req = urllib2.Request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        # req = urllib2.Request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        req = urllib2.Request("http://127.0.0.1:8888", json.dumps(data), {'Content-Type': 'application/json'})
         f = urllib2.urlopen(req)
+        try:
+            response = f.read()
 
-        response = f.read()
         print response
         f.close()
         time.sleep(60)
