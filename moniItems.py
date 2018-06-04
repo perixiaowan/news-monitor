@@ -70,10 +70,12 @@ if __name__ == "__main__":
         data = m.runAllGet()
         print("type(data):%s" %(type(data)))
         print(data)
+        params = urllib.parse.urlencode(data).encode(encoding='UTF8')
+        print("type(params):%s" % (type(params)))
         url = "http://47.52.106.208:8888"
         # data = urllib.parse.urlencode(value).encode(encoding='utf-8')
         # req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
-        f = urllib.request.urlopen(url, json.dumps(data), {'Content-Type': 'application/json'})
+        f = urllib.request.urlopen(url, json.dumps(params), {'Content-Type': 'application/json'})
         # f = urllib.request.urlopen(urlencode)
         # f = urllib.urlopen(req)
         response = f.read().decode('utf-8')
