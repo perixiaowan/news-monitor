@@ -68,6 +68,7 @@ if __name__ == "__main__":
     while True:
         m = mon()
         data = m.runAllGet()
+        print("type(data):%s" %(type(data)))
         print(data)
         url = "http://47.52.106.208:8888"
         # data = urllib.parse.urlencode(value).encode(encoding='utf-8')
