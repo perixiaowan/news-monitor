@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: GBK -*-
 import inspect
 import time
 import urllib
@@ -55,7 +56,7 @@ class mon:
                 return a / 1024
 
     def runAllGet(self):
-        # è‡ªåŠ¨è·å–monç±»é‡Œçš„æ‰€æœ‰getXXXæ–¹æ³•ï¼Œç”¨XXXä½œä¸ºkeyï¼ŒgetXXX()çš„è¿”å›å€¼ä½œä¸ºvalueï¼Œæ„é€ å­—å…¸
+        # ×Ô¶¯»ñÈ¡monÀàÀïµÄËùÓĞgetXXX·½·¨£¬ÓÃXXX×÷Îªkey£¬getXXX()µÄ·µ»ØÖµ×÷Îªvalue£¬¹¹Ôì×Öµä
         for fun in inspect.getmembers(self, predicate=inspect.ismethod):
             if fun[0][:3] == 'get':
                 self.data[fun[0][3:]] = fun[1]()
