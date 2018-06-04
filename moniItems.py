@@ -5,8 +5,9 @@ import time
 import urllib
 import json
 import socket
-import urllib.request
-import urllib.parse
+# import urllib.request
+# import urllib.parse
+import urllib2.Request
 
 
 class mon:
@@ -68,18 +69,24 @@ if __name__ == "__main__":
     while True:
         m = mon()
         data = m.runAllGet()
-        print("type(data):%s" %(type(data)))
+        # print("type(data):%s" %(type(data)))
         print(data)
-        params = urllib.parse.urlencode(data).encode(encoding='UTF8')
-        print("type(params):%s" % (type(params)))
-        url = "http://47.52.106.208:8888"
-        # data = urllib.parse.urlencode(value).encode(encoding='utf-8')
-        # req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
-        req = urllib.request.Request(url, params, {'Content-Type': 'application/json'})
-        urlopen_get = urllib.request.urlopen(req)
-        # f = urllib.request.urlopen(urlencode)
-        # f = urllib.urlopen(req)
-        response = urlopen_get.read().decode('utf-8')
-        print(response)
-        urlopen_get.close()
+        # params = urllib.parse.urlencode(data).encode(encoding='UTF8')
+        # print("type(params):%s" % (type(params)))
+        # url = "http://47.52.106.208:8888"
+        # # data = urllib.parse.urlencode(value).encode(encoding='utf-8')
+        # # req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        # req = urllib.request.Request(url, params, {'Content-Type': 'application/json'})
+        # urlopen_get = urllib.request.urlopen(req)
+        # # f = urllib.request.urlopen(urlencode)
+        # # f = urllib.urlopen(req)
+        # response = urlopen_get.read().decode('utf-8')
+        # print(response)
+        # urlopen_get.close()
+
+        req = urllib2.Request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        f = urllib2.urlopen(req)
+        response = f.read()
+        print response
+        f.close()
         time.sleep(60)
