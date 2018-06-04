@@ -66,7 +66,7 @@ if __name__ == "__main__":
         m = mon()
         data = m.runAllGet()
         print(data)
-        req = urllib.Request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
         f = urllib.urlopen(req)
         response = f.read()
         print(response)
