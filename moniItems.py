@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import inspect
 import time
-# import urllib
+import urllib
 import json
 import socket
-import urllib.request
+import urllib2
 
 
 class mon:
@@ -67,9 +67,9 @@ if __name__ == "__main__":
         m = mon()
         data = m.runAllGet()
         print(data)
-        # req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
-        f = urllib.request.urlopen("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
-        # f = urllib.urlopen(req)
+        req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        # f = urllib.request.urlopen("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        f = urllib.urlopen(req)
         response = f.read()
         print(response)
         f.close()
