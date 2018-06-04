@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-# -*- coding: GBK -*-
+# -*- coding: utf-8 -*-
 import inspect
 import time
 import urllib
 import json
 import socket
 import urllib.request
+import urllib.parse
 
 
 class mon:
@@ -56,7 +57,7 @@ class mon:
                 return a / 1024
 
     def runAllGet(self):
-        # ×Ô¶¯»ñÈ¡monÀàÀïµÄËùÓĞgetXXX·½·¨£¬ÓÃXXX×÷Îªkey£¬getXXX()µÄ·µ»ØÖµ×÷Îªvalue£¬¹¹Ôì×Öµä
+        # è‡ªåŠ¨è·å–monç±»é‡Œçš„æ‰€æœ‰getXXXæ–¹æ³•ï¼Œç”¨XXXä½œä¸ºkeyï¼ŒgetXXX()çš„è¿”å›å€¼ä½œä¸ºvalueï¼Œæ„é€ å­—å…¸
         for fun in inspect.getmembers(self, predicate=inspect.ismethod):
             if fun[0][:3] == 'get':
                 self.data[fun[0][3:]] = fun[1]()
@@ -68,11 +69,13 @@ if __name__ == "__main__":
         m = mon()
         data = m.runAllGet()
         print(data)
-        # data = urllib.parse.urlencode(url).encode(encoding='utf-8')
+        url ="http://47.52.106.208:8888"
+        data = urllib.parse.urlencode(data).encode(encoding='utf-8')
         # req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
-        f = urllib.request.urlopen("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
+        f = urllib.request.urlopen(url, json.dumps(data), {'Content-Type': 'application/json'})
+        # f = urllib.request.urlopen(urlencode)
         # f = urllib.urlopen(req)
-        response = f.read()
+        response = f.read().decode('utf-8')
         print(response)
         f.close()
         time.sleep(60)
