@@ -7,7 +7,7 @@ import json
 import socket
 # import urllib.request
 # import urllib.parse
-import urllib2.Request
+import urllib2
 
 
 class mon:
