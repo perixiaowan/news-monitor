@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import inspect
-import time
+import datetime,time
 import urllib
 import json
 import socket
@@ -15,7 +15,7 @@ class mon:
         self.data = {}
 
     def getTime(self):
-        return str(int(time.time()) + 8 * 3600)
+        return str(time.strftime("%Y-%m-%d %H:%M:%S"))
 
     def getHost(self):
         return socket.gethostname()

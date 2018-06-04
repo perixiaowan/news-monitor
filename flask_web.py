@@ -27,7 +27,7 @@ def hello():
         print("data:%s" % (data['Time']))
         try:
             sql = "INSERT INTO `stat` (`host`,`mem_free`,`mem_usage`,`mem_total`,`load_avg`,`time`) VALUES('%s', '%d', '%d', '%d', '%s', '%d')" % (
-            data['Host'], data['MemFree'], data['MemUsage'], data['MemTotal'], data['LoadAvg'], int(data['Time']))
+            data['Host'], data['MemFree'], data['MemUsage'], data['MemTotal'], data['LoadAvg'], data['Time'])
             ret = cursor.execute(sql)
         except mysql.IntegrityError:
             pass
@@ -39,7 +39,7 @@ def hello():
 @app.route("/data", methods=["GET"])
 def getdata():
     cursor.execute("SELECT `time`,`mem_usage` FROM `stat`")
-    ones = [[i[0] * 1000, i[1]] for i in cursor.fetchall()]
+    ones = [[i[0], i[1]] for i in cursor.fetchall()]
     return "%s(%s);" % (request.args.get('callback'), json.dumps(ones))
 
 

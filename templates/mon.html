@@ -18,14 +18,33 @@ $(function () {
 
         // Create the chart
         $('#container').highcharts({
-
+            credits:{
+                enabled:false // 禁用版权信息
+            },
             rangeSelector: {
                 inputEnabled: $('#container').width() > 480,
                 selected: 1
             },
-
             title: {
-                text: 'liuxiaowan.com'
+                text: 'eNews监控'
+            },
+            xAxis: {//X轴数据
+
+                //categories: json.TimeList,
+                labels: {
+                    enabled:false   //X轴不显示labels
+                }
+            },
+            yAxis:{
+                 title:{
+                    text:'values'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                enabled: false
             },
 
             series: [{
