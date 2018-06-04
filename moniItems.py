@@ -67,10 +67,10 @@ class mon:
 if __name__ == "__main__":
     while True:
         m = mon()
-        value = m.runAllGet()
-        print(value)
+        data = m.runAllGet()
+        print(data)
         url = "http://47.52.106.208:8888"
-        data = urllib.parse.urlencode(value).encode(encoding='utf-8')
+        # data = urllib.parse.urlencode(value).encode(encoding='utf-8')
         # req = urllib.request("http://47.52.106.208:8888", json.dumps(data), {'Content-Type': 'application/json'})
         f = urllib.request.urlopen(url, json.dumps(data), {'Content-Type': 'application/json'})
         # f = urllib.request.urlopen(urlencode)
