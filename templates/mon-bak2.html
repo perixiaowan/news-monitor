@@ -1,0 +1,75 @@
+<title>eNews-mon</title>
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>News Monitor Example</title>
+        <META HTTP-EQUIV="Refresh" CONTENT="300">
+        <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+        <!--<script src="/static/js/highstock.js"></script>-->
+        <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
+        <script src="/static/js/highcharts.js"></script>
+        <script src="/static/js/exporting.js"></script>
+        <style type="text/css">
+${demo.css}
+        </style>
+        <script type="text/javascript">
+$(function () {
+    $.getJSON('/data?callback=?', function (data) {
+
+        // Create the chart
+        $('#container').highcharts({
+            credits:{
+                enabled:false // 禁用版权信息
+            },
+            rangeSelector: {
+                inputEnabled: $('#container').width() > 480,
+                selected: 1
+            },
+            title: {
+                text: 'eNews监控'
+            },
+
+
+            series: [{
+                name: 'bjxt',
+                data: data,
+                type: 'spline',
+                tooltip: {
+                    valueDecimals: 2
+                    <!--dateTimeLabelFormats: second-->
+                }
+            }]
+        });
+    });
+});
+        </script>
+    </head>
+    <body>
+
+<!--
+
+xAxis: {//X轴数据
+
+                //categories: json.TimeList,
+                labels: {
+                    enabled:false   //X轴不显示labels
+                }
+            },
+            yAxis:{
+                 title:{
+                    text:'values'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                enabled: false
+            },
+
+-->
+
+<div id="container" style="height: 400px"></div>
+    </body>
+</html>  

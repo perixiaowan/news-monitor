@@ -1,75 +1,897 @@
-<title>eNews-mon</title>
 <!DOCTYPE HTML>
 <html>
     <head>
+        <link rel="icon" href="../favicon.ico" />
+        <title>eNews监控</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#0A8476">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>News Monitor Example</title>
-        <META HTTP-EQUIV="Refresh" CONTENT="300">
-        <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+
+        <script type="text/javascript" src="../static/js/libs/jquery-3.3.1.min.js"></script>
         <!--<script src="/static/js/highstock.js"></script>-->
         <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
-        <script src="/static/js/highcharts.js"></script>
-        <script src="/static/js/exporting.js"></script>
-        <style type="text/css">
-${demo.css}
-        </style>
+        <script src="../static/js/highcharts.js"></script>
+        <script src="../static/js/exporting.js"></script>
+
+        <!--bootstrap-treeview.js-->
+
+        <script src="../static/js/libs/bootstrap.min.js"></script>
+        <script src="../static/js/libs/bootstrap-treeview.js"></script>
+
+        <script src="../static/js/libs/angular.min.js"></script>
+        <script src="../static/js/libs/angular-translate.min.js"></script>
+          <!-- external javascript dependencies -->
+        <script src="../static/js/libs/lodash-4.17.3.min.js"></script>
+
+
+        <script src="../static/js/libs/angularui-bootstrap-tpls.min.js"></script>
+        <script src="../static/js/libs/bootstrap-filestyle.js"></script>
+
+        <script src="../static/js/libs/jquery.flot.min.js"></script>
+        <script src="../static/js/libs/jquery.flot.time.min.js"></script>
+
+
+        <!-- webui core -->
+        <script src="../static/js/init.js"></script>
+        <script src="../static/js/configuration.js"></script>
+
+        <script src="../static/js/directives/chunkbar.js"></script>
+        <script src="../static/js/directives/dgraph.js"></script>
+        <script src="../static/js/directives/fileselect.js"></script>
+        <script src="../static/js/directives/fselect.js"></script>
+        <script src="../static/js/directives/textarea.js"></script>
+
+        <script src="../static/js/filters/bytes.js"></script>
+        <script src="../static/js/filters/url.js"></script>
+
+        <script src="../static/js/services/deps.js"></script>
+        <script src="../static/js/services/base64.js"></script>
+        <script src="../static/js/services/utils.js"></script>
+
+        <script src="../static/js/services/modals.js"></script>
+        <script src="../static/js/services/alerts.js"></script>
+
+        <script src="../static/js/services/errors.js"></script>
+
+        <script src="../static/js/services/settings/settings.js"></script>
+        <script src="../static/js/services/settings/filters.js"></script>
+
+        <script src="../static/js/services/rpc/jsoncall.js"></script>
+        <script src="../static/js/services/rpc/sockcall.js"></script>
+        <script src="../static/js/services/rpc/syscall.js"></script>
+        <script src="../static/js/services/rpc/rpc.js"></script>
+        <script src="../static/js/services/rpc/helpers.js"></script>
+
+        <script src="../static/js/ctrls/main.js"></script>
+        <script src="../static/js/ctrls/modal.js"></script>
+        <script src="../static/js/ctrls/nav.js"></script>
+        <script src="../static/js/ctrls/alert.js"></script>
+        <script src="../static/js/ctrls/props.js"></script>
+
+        <!-- translate -->
+        <script src="../static/js/libs/angular-translate.min.js"></script>
+        <script src="../static/js/translate/nl_NL.js"></script>
+        <script src="../static/js/translate/en_US.js"></script>
+        <script src="../static/js/translate/th_TH.js"></script>
+        <script src="../static/js/translate/zh_CN.js"></script>
+        <script src="../static/js/translate/zh_TW.js"></script>
+        <script src="../static/js/translate/pl_PL.js"></script>
+        <script src="../static/js/translate/fr_FR.js"></script>
+        <script src="../static/js/translate/de_DE.js"></script>
+        <script src="../static/js/translate/es_ES.js"></script>
+        <script src="../static/js/translate/ru_RU.js"></script>
+        <script src="../static/js/translate/it_IT.js"></script>
+        <script src="../static/js/translate/tr_TR.js"></script>
+        <script src="../static/js/translate/cs_CZ.js"></script>
+        <script src="../static/js/translate/fa_IR.js"></script>
+        <script src="../static/js/translate/id_ID.js"></script>
+
+
+        <!--<link rel="stylesheet" href="../static/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="../static/css/bootstrap.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+
+
         <script type="text/javascript">
-$(function () {
-    $.getJSON('/data?callback=?', function (data) {
-
-        // Create the chart
-        $('#container').highcharts({
-            credits:{
-                enabled:false // 禁用版权信息
-            },
-            rangeSelector: {
-                inputEnabled: $('#container').width() > 480,
-                selected: 1
-            },
-            title: {
-                text: 'eNews监控'
-            },
+            function activeLastPointToolip(chart) {
+                    var points = chart.series[0].points;
+                    chart.tooltip.refresh(points[points.length -1]);
+            }
+            var chart = null;
+            // 获取 CSV 数据并初始化图表
+            $.getJSON('/data?callback=?', function (data) {
+                console.log("data:"+data)
+                chart = Highcharts.chart('container', {
 
 
-            series: [{
-                name: 'bjxt',
-                data: data,
-                type: 'spline',
-                tooltip: {
-                    valueDecimals: 2
-                    <!--dateTimeLabelFormats: second-->
-                }
-            }]
-        });
-    });
-});
+
+                    series: [{
+                        name: 'bjxt',
+                        data: data,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    }],
+                    chart: {
+                        type: 'spline',
+                        marginRight: 10,
+		            },
+                    title: {
+                        text: 'bjxt内存使用情况'
+                    },
+                    subtitle: {
+                        text: '测试服务器'
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 3600 * 1000, // 坐标轴刻度间隔为一星期
+                        tickWidth: 0,
+                        gridLineWidth: 1,
+                        labels: {
+                            align: 'left',
+                            x: 3,
+                            y: -3
+                        },
+                        // 时间格式化字符
+                        // 默认会根据当前的刻度间隔取对应的值，即当刻度间隔为一周时，取 week 值
+                        dateTimeLabelFormats: {
+                            hour: '%Y-%m-%d %H'
+                        }
+                    },
+                    yAxis: [{ // 第一个 Y 轴，放置在左边（默认在坐标）
+                        title: {
+                            text: "内存占用情况"
+                        },
+                        labels: {
+                            align: 'left',
+                            x: 3,
+                            y: 16
+                        },
+                        showFirstLabel: false
+                    }, {    // 第二个坐标轴，放置在右边
+                        linkedTo: 0,
+                        gridLineWidth: 0,
+                        opposite: true,  // 通过此参数设置坐标轴显示在对立面
+                        title: {
+                            text: null
+                        },
+                        labels: {
+                            align: 'right',
+                            x: -3,
+                            y: 16
+                        },
+                        showFirstLabel: false
+                    }],
+                    legend: {
+                        align: 'left',
+                        verticalAlign: 'top',
+                        y: 20,
+                        floating: true,
+                        borderWidth: 0
+                    },
+                    tooltip: {
+                        shared: true,
+                        crosshairs: true,
+                        // 时间格式化字符
+                        // 默认会根据当前的数据点间隔取对应的值
+                        // 当前图表中数据点间隔为 1分，所以配置 day 值即可
+                        dateTimeLabelFormats: {
+                            minute: '%Y-%m-%d %H-%M'
+                        }
+                    },
+                    plotOptions: {
+                        series: {
+                            data: data,
+                            cursor: 'pointer',
+                            point: {
+                                events: {
+                                    // 数据点点击事件
+                                    // 其中 e 变量为事件对象，this 为当前数据点对象
+                                    click: function (e) {
+                                        $('.message').html( Highcharts.dateFormat('%Y-%m-%d %H-%M-%S', this.x) + ':<br/>  内存使用量：' +this.y );
+                                    }
+                                }
+                            },
+                            marker: {
+                                lineWidth: 1
+                            }
+                        }
+                    },
+
+                    credits: {
+                        enabled: true,
+                        href: 'http://www.liuxiaowan.com',
+                        <!--position: null,-->
+                        <!--style: null,-->
+                        text: 'liuxiaowan.com'
+                    }
+                });
+            });
+
+            function getForm(){
+            //使用JQuery从后台获取JSON格式的数据
+                $.getJSON('/getnewdata?callback=?', function (data) {
+                                                                    //为图表设置值
+                    chart.series[0].setData(data);
+                });
+            }
+
+
+            $(document).ready(function() {
+                //每隔3秒自动调用方法，实现图表的实时更新
+                window.setInterval(getForm,60000);
+
+            });
+
         </script>
     </head>
-    <body>
 
-<!--
+<body ng-controller="MainCtrl" ng-cloak ng-app="">
 
-xAxis: {//X轴数据
+<!-- {{{ header -->
+    <div class="navbar main-navbar navbar-static-top" ng-controller="NavCtrl">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand"><span class="fa fa-fw fa-arrow-circle-down"></span> {{ name }}</a>
+        </div>
 
-                //categories: json.TimeList,
-                labels: {
-                    enabled:false   //X轴不显示labels
+        <form class="navbar-form navbar-right" role="search">
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="{{ 'Search' | translate }}" ng-model="downloadFilter" autocomplete="off" ng-change="onDownloadFilter()" />
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </div>
+        </form>
+
+        <div class="collapse navbar-collapse" collapse="collapsed">
+          <ul class="nav navbar-nav">
+            <li class="dropdown" dropdown>
+              <a class="dropdown-toggle" href="#" dropdown-toggle>
+                {{ 'Monitor' | translate }} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#" ng-click="addUris()">
+                    <span class="fa fa-fw fa-link">&nbsp;</span> {{ 'test function1' | translate }}
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="dropdown" dropdown>
+              <a class="dropdown-toggle" href="#" dropdown-toggle> {{ 'Manage' | translate }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a
+                    href="#"
+                    ng-click="forcePauseAll()"><span class="fa fa-fw fa-pause">&nbsp;</span> {{ 'Pause All' | translate }}</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    ng-click="unpauseAll()"><span class="fa fa-fw fa-play">&nbsp;</span> {{ 'Resume Paused' | translate }}</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    ng-click="purgeDownloadResult()"><span class="fa fa-fw fa-times-circle">&nbsp;</span> {{ 'Purge Completed' | translate }}</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    ng-click="shutDownServer()"><span class="fa fa-fw fa-power-off">&nbsp;</span> {{ 'Shutdown Server' | translate }}</a>
+                </li>
+                <!-- not adding remove all as requires many rpc syscalls to finish-->
+                <li>
+                  <a
+                    href="#"
+                    ng-click="removeAll()"><span class="fa fa-fw fa-fire">&nbsp;</span> Remove All</a>
+                </li>
+
+              </ul>
+            </li>
+
+          </ul>
+
+          <ul class="nav navbar-nav">
+            <li class="dropdown" dropdown>
+              <a
+                href="#"
+                class="dropdown-toggle" dropdown-toggle>{{ 'Settings' | translate }} <span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a
+                    ng-click="changeCSettings()"
+                    href="#"><span class="fa fa-fw fa-cog">&nbsp;</span> {{ 'Connection Settings' | translate }}</a>
+                </li>
+
+                <li>
+                  <a
+                    ng-click="changeGSettings()"
+                    href="#"><span class="fa fa-fw fa-cogs">&nbsp;</span> {{ 'Global Settings' | translate }}</a>
+                </li>
+
+                <li>
+                  <a
+                    ng-click="showServerInfo()"
+                    href="#"><span class="fa fa-fw fa-info-circle">&nbsp;</span> {{ 'Server info' | translate }}</a>
+                </li>
+
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="nav navbar-nav pull-right" ng-show="false">
+            <li class="dropdown" dropdown>
+              <a
+                class="dropdown-toggle" dropdown-toggle
+                href="#">{{ 'Miscellaneous' | translate }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#"><span class="fa fa-fw fa-list-alt">&nbsp;</span> {{ 'Global Statistics' | translate }}</a>
+                </li>
+                <li>
+                  <a href="#"><span class="fa fa-fw fa-info-circle">&nbsp;</span> {{ 'About' | translate }}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+
+          <ul class="nav navbar-nav">
+            <li class="dropdown" dropdown>
+              <a
+                      href="#"
+                      class="dropdown-toggle" dropdown-toggle>{{ 'Language' | translate }} <span class="caret"></span></a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a
+                          ng-click="changeLanguage('en_US')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-us">&nbsp;</span> English</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('th_TH')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-th">&nbsp;</span> ไทย</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('nl_NL')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-nl">&nbsp;</span> Nederlands</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('zh_CN')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-cn">&nbsp;</span> 简体中文</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('zh_TW')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-tw">&nbsp;</span> 繁體中文</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('pl_PL')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-pl">&nbsp;</span> Polish</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('fr_FR')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-fr">&nbsp;</span> Français</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('de_DE')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-de">&nbsp;</span> Deutsch</a>
+                </li>
+                <li>
+                  <a
+                          ng-click="changeLanguage('es_ES')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-es">&nbsp;</span> Español</a>
+                </li>
+                <li>
+                <a
+                          ng-click="changeLanguage('ru_RU')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-ru">&nbsp;</span> Русский</a>
+                </li>
+                <li>
+                <a
+                          ng-click="changeLanguage('it_IT')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-it">&nbsp;</span> Italiano</a>
+                </li>
+                <li>
+                <a
+                          ng-click="changeLanguage('tr_TR')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-tr">&nbsp;</span> Turkish</a>
+                </li>
+                <li>
+                <a
+                          ng-click="changeLanguage('cs_CZ')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-cz">&nbsp;</span> Czech</a>
+                </li>
+                <li>
+                <a
+                          ng-click="changeLanguage('fa_IR')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-ir">&nbsp;</span> Farsi</a>
+                </li>
+                <li>
+                <a
+                          ng-click="changeLanguage('id_ID')"
+                          href="#"><span class="fa fa-fw flag-icon flag-icon-id">&nbsp;</span> Indonesian</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+        </div>
+
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+<!-- }}} -->
+
+
+
+<!-- {{{ body -->
+<div role="main" class="container-fluid">
+
+<div class="row-fluid">
+    <div ng-class="{'col-md-3': enable.sidebar.show}" ng-show="enable.sidebar.show">
+        <!-- {{{ nav side bar -->
+        <div class="sidebar-nav">
+
+            <!-- {{{ trees -->
+            <div id="tree"></div>
+            <!-- }}} -->
+            <br />
+
+        </div>
+        <!-- }}} -->
+    </div>
+
+    <div ng-class="{'col-md-9': enable.sidebar.show, 'col-md-12': !enable.sidebar.show }">
+        <div id="container" style="height: 400px"></div>
+        <div class="message"></div>
+    </div>
+
+</div>
+</div>
+
+<!-- }}} -->
+
+
+<script type="text/javascript">
+          function getTree() {
+          var tree =  [
+            {
+              text: '北京外网eNews服务器',
+              href: '#parent1',
+              tags: ['4'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
                 }
+              ]
             },
-            yAxis:{
-                 title:{
-                    text:'values'
+            {
+              text: '北京外网eNews备机',
+              href: '#parent2',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
                 }
+              ]
             },
-            legend: {
-                enabled: false
+            {
+              text: '江苏外网eNews服务器',
+              href: '#parent3',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
             },
-            tooltip: {
-                enabled: false
+            {
+              text: 'HK外网eNews服务器',
+              href: '#parent4',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
             },
+            {
+              text: 'MC外网eNews服务器',
+              href: '#parent5',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              text: 'PR外网eNews服务器',
+              href: '#parent5',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              text: 'CR外网eNews服务器',
+              href: '#parent5',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              text: 'NB外网eNews服务器',
+              href: '#parent5',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              text: 'NY外网eNews服务器',
+              href: '#parent5',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['0']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              text: 'MX外网eNews服务器',
+              href: '#parent5',
+              tags: ['0'],
+              nodes: [
+                {
+                  text: 'i0app3',
+                  href: '#child1',
+                  tags: ['2'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['5']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['0']
+                    }
+                  ]
+                },
+                {
+                  text: 'i0app4',
+                  href: '#child2',
+                  tags: ['0'],
+                  nodes: [
+                    {
+                      text: '详细信息',
+                      href: '#grandchild1',
+                      tags: ['2']
+                    },
+                    {
+                      text: '文件系统剩余检查',
+                      href: '#grandchild2',
+                      tags: ['3']
+                    }
+                  ]
+                }
+              ]
+            }
+          ];
+            return tree;
+          }
 
--->
-
-<div id="container" style="height: 400px"></div>
-    </body>
+          $('#tree').treeview({
+            color: "#428bca",
+            expandIcon: "glyphicon glyphicon-plus-sign",
+            collapseIcon: "glyphicon glyphicon-minus-sign",
+            nodeIcon: "glyphicon glyphicon-map-marker",
+            showTags: true,
+            <!--设置树形菜单不展开，默认值是2，即展开-->
+            levels: 1,
+            data: getTree()
+          });
+</script>
+</body>
 </html>  

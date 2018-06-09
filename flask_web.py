@@ -5,6 +5,10 @@ import json
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
+# 解决jinja和angularjs模板不兼容的问题
+app.jinja_env.variable_start_string = '%%'
+app.jinja_env.variable_end_string = '%%'
+# end
 db = mysql.connect(host="47.52.106.208",user="xiaowan", password="xiaowan", db="falcon", charset="utf8")
 db.autocommit(True)
 
@@ -40,13 +44,27 @@ def hello():
 
 @app.route("/data", methods=["GET"])
 def getdata():
-    cursor.execute("SELECT `time`,`mem_usage` FROM `stat`")
+    cursor.execute("SELECT `time`,`mem_usage` FROM `stat` order by `time` desc LIMIT 0,120")
     ones = [[i[0].strftime("%Y-%m-%d %H:%M:%S"), i[1]] for i in cursor.fetchall()]
+    print("json.dumps(ones):%s" % (type(json.dumps(ones))))
     onesToJson = json.dumps(ones)
-    print("json.dumps(ones):%s" %(type(json.dumps(ones))))
+    # json_data = json.loads(onesToJson)
+    # print("json.dumps(json_data):%s" %(type(json.dumps(json_data))))
     return "%s(%s);" % (request.args.get('callback'), onesToJson)
 
 
+@app.route("/getnewdata", methods=["GET"])
+def getnewdata():
+    cursor.execute("SELECT `time`,`mem_usage` FROM `stat` order by `time` desc LIMIT 0,1")
+    ones = [[i[0].strftime("%Y-%m-%d %H:%M:%S"), i[1]] for i in cursor.fetchall()]
+    print("json.dumps(ones):%s" % (type(json.dumps(ones))))
+    onesToJson = json.dumps(ones)
+    # json_data = json.loads(onesToJson)
+    # print("json.dumps(json_data):%s" %(type(json.dumps(json_data))))
+    return "%s(%s);" % (request.args.get('callback'), onesToJson)
+
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8888, debug=True)
-    # app.run(host="127.0.0.1", port=8888, debug=True)
+    # app.run(host="0.0.0.0", port=8888, debug=True)
+    app.run(host="127.0.0.1", port=8888, debug=True)
