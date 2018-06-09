@@ -127,7 +127,7 @@
                     },
                     xAxis: {
                         type: 'datetime',
-                        tickInterval: 3600 * 1000, // 坐标轴刻度间隔为一星期
+                        tickInterval: 3600 * 1000, // 坐标轴刻度间隔为一小时
                         tickWidth: 0,
                         gridLineWidth: 1,
                         labels: {
@@ -177,7 +177,7 @@
                         crosshairs: true,
                         // 时间格式化字符
                         // 默认会根据当前的数据点间隔取对应的值
-                        // 当前图表中数据点间隔为 1分，所以配置 day 值即可
+                        // 当前图表中数据点间隔为 1分，所以配置 minute 值即可
                         dateTimeLabelFormats: {
                             minute: '%Y-%m-%d %H-%M'
                         }
@@ -191,7 +191,7 @@
                                     // 数据点点击事件
                                     // 其中 e 变量为事件对象，this 为当前数据点对象
                                     click: function (e) {
-                                        $('.message').html( Highcharts.dateFormat('%Y-%m-%d %H-%M-%S', this.x) + ':<br/>  内存使用量：' +this.y );
+                                        $('.message').html( Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + ':<br/>  内存使用量：' +this.y );
                                     }
                                 }
                             },
@@ -213,7 +213,7 @@
 
             function getForm(){
             //使用JQuery从后台获取JSON格式的数据
-                $.getJSON('/getnewdata?callback=?', function (data) {
+                $.getJSON('/data?callback=?', function (data) {
                                                                     //为图表设置值
                     chart.series[0].setData(data);
                 });
