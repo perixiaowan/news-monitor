@@ -44,8 +44,8 @@ def hello():
 
 @app.route("/data", methods=["GET"])
 def getdata():
-    cursor.execute("SELECT `time`,`mem_usage` FROM `stat` order by `time` desc LIMIT 0,120")
-    ones = [[i[0].strftime("%Y-%m-%d %H:%M:%S"), i[1]] for i in cursor.fetchall()]
+    cursor.execute("SELECT `time`,`mem_usage`,`mem_total`  FROM (SELECT * from `stat` order by `time` desc LIMIT 0,120) t order by `time` asc")
+    ones = [[i[0].strftime("%Y-%m-%d %H:%M:%S"), float(i[1])/float(i[2])] for i in cursor.fetchall()]
     print("json.dumps(ones):%s" % (type(json.dumps(ones))))
     onesToJson = json.dumps(ones)
     # json_data = json.loads(onesToJson)
@@ -55,8 +55,8 @@ def getdata():
 
 @app.route("/getnewdata", methods=["GET"])
 def getnewdata():
-    cursor.execute("SELECT `time`,`mem_usage` FROM `stat` order by `time` desc LIMIT 0,1")
-    ones = [[i[0].strftime("%Y-%m-%d %H:%M:%S"), i[1]] for i in cursor.fetchall()]
+    cursor.execute("SELECT `time`,`mem_usage`,`mem_total` FROM (SELECT * from  `stat` order by `time` desc LIMIT 0,1) t order by  `time` asc")
+    ones = [[i[0].strftime("%Y-%m-%d %H:%M:%S"), float(i[1])/float(i[2])] for i in cursor.fetchall()]
     print("json.dumps(ones):%s" % (type(json.dumps(ones))))
     onesToJson = json.dumps(ones)
     # json_data = json.loads(onesToJson)
@@ -67,4 +67,4 @@ def getnewdata():
 
 if __name__ == "__main__":
     # app.run(host="0.0.0.0", port=8888, debug=True)
-    app.run(host="127.0.0.1", port=8888, debug=True)
+    app.run(host="0.0.0.0", port=8888, debug=True)
